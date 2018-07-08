@@ -5,29 +5,31 @@ class Legend extends Component {
 
   render() {
 
-    console.log('drwn lgnd');
-    var stops = this.props.active.stops;
-    console.log(stops);
     var legendStops = [];
+    
+    if(this.props.colors){
+            console.log('drwn lgnd');
+    let colors = this.props.colors;
+    console.log(colors);
+    let intervals = this.props.active.intervals;
+    
 
-    var prevStop = -1;
-    var prevColor;
 
-    for ( var i = 0; i < stops.length; i++ ) {
-        if ( prevStop >= 0 && prevColor) {
-            var text = prevStop + ' - ' + stops[i][0];
-            legendStops.push([text, prevColor]);
+    for ( var i = 0; i < colors.length; i++ ) {
+        var text
+        if ( i < colors.length -1) {
+            text = intervals[i] + ' - ' + intervals[i + 1];
+        }else {
+            text = intervals[i] + ' +';
         }
 
-        prevStop = stops[i][0];
-        prevColor = stops[i][1];
+        legendStops.push([text, colors[i]]);
 
+    }
     }
 
 
-    text =  prevStop + ' + ';
-    legendStops.push([text, prevColor]);
-    console.log("legendStops", legendStops);
+
 
     let legendItems = legendStops.map( stop => {
         var color = stop[1];

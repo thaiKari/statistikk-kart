@@ -8,21 +8,32 @@ import PitchToggle from './PitchToggle/pitchtogglecontrol.js'
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
 
 
+
+
 class Map extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      //active: options[0]
+      colors: ['#f8d5cc', '#f4bfb6', '#f1a8a5', '#ee8f9a', '#ec739b', '#dd5ca8',  '#c44cc0', '#9f43d7', '#6e40e6' ]
     };
   }
 
+  generateStops(){
+    var stops = [];
+    let colors = this.state.colors;
+    for (var i = 0; i < colors.length ; i++ ){
+      stops.push([this.props.active.intervals[i], colors[i]]);
+    }
+    console.log(stops);
+    return stops;
+  }
+
   componentDidMount() {
+    this.setState({stops: this.generateStops()});
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
       style: 'mapbox://styles/mapbox/streets-v9',
-      //center: [5, 34],
-      //zoom: 1.5
       center: [10.924519, 59.962828],
       zoom: 11
     });
@@ -40,13 +51,12 @@ class Map extends Component {
         paint: {
           'fill-extrusion-color':{
             property: this.props.active.property,
-            stops: this.props.active.stops,
+            stops: this.state.stops,
           },
           'fill-extrusion-opacity': 0.8
         }
-      },); // ID metches `mapbox/streets-v9`
+      },); 
 
-      //this.setFill();
       this.getHeight();
     });
 
@@ -54,11 +64,7 @@ class Map extends Component {
 
     this.map.on('rotate', () =>{
       if(this.map.getPitch() > 25 ) {
-        this.map.setPaintProperty('countries', 'fill-extrusion-height', this.getHeight()
-        /*{
-          type: 'identity',
-          property: this.state.active.property
-        }*/);
+        this.map.setPaintProperty('countries', 'fill-extrusion-height', this.getHeight());
       } else {
         this.map.setPaintProperty('countries', 'fill-extrusion-height',0 );
       }
@@ -67,7 +73,7 @@ class Map extends Component {
 
   getHeight() {
     let heightProperty = this.props.active.property;
-    let maxVal = data.maxVals[heightProperty];
+    let maxVal = this.props.active.maxVal;
     console.log(maxVal);
     let allFeatures = data.features;
     const stops = [];
@@ -89,23 +95,13 @@ class Map extends Component {
       stops: stops
     };
 
-    console.log(height);
-
     return height;
-  }
-
-  setFill() {
-    const { property, stops } = this.props.active;
-    this.map.setPaintProperty('countries', 'fill-color', {
-      property,
-      stops
-    });    
   }
 
   render() {
     return (
       <div className="Map">
-        <Legend active={this.props.active}/>
+        <Legend active={this.props.active} colors={this.state.colors}/>
         <div ref={el => this.mapContainer = el} className="map" id='map'/>
       </div>
     );
