@@ -35,7 +35,7 @@ class Map extends Component {
       container: this.mapContainer,
       style: 'mapbox://styles/mapbox/streets-v9',
       center: [10.924519, 59.962828],
-      zoom: 11
+      zoom: 12
     });
 
     this.map.on('load', () => {
@@ -60,7 +60,7 @@ class Map extends Component {
       this.getHeight();
     });
 
-    this.map.addControl(new PitchToggle({minpitchzoom: 11})); 
+    this.map.addControl(new PitchToggle({minpitchzoom: 13})); 
 
     this.map.on('rotate', () =>{
       if(this.map.getPitch() > 25 ) {
