@@ -2,7 +2,7 @@
   "name": "statistikk-kart",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://thaiKari.github.io/statistikk-kart",
+  "homepage": "https://thaiKari.github.io/statistikk-kart/",
   "dependencies": {
     "mapbox-gl": "^0.46.0",
     "react": "^16.4.1",
