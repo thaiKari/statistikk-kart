@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './Map.css'
-import data from './../data/stovner.json'
+import data from './../data/befolkning_5km.json'
 import Legend from './Legend'
 import PitchToggle from './PitchToggle/pitchtogglecontrol.js'
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
@@ -34,8 +34,8 @@ class Map extends Component {
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
       style: 'mapbox://styles/mapbox/streets-v9',
-      center: [10.924519, 59.962828],
-      zoom: 12
+      center: [8.5, 62],
+      zoom: 5
     });
 
     this.map.on('load', () => {
@@ -74,19 +74,28 @@ class Map extends Component {
   getHeight() {
     let heightProperty = this.props.active.property;
     let maxVal = this.props.active.maxVal;
-    console.log(maxVal);
+    console.log(maxVal/500);
     let allFeatures = data.features;
     const stops = [];
+    let values = [];
+
+    console.log('numSquares', allFeatures.length);
 
     Object.keys(allFeatures).forEach(id => {
       
       const value = allFeatures[id].properties[this.props.active.property];
-
+      
       if (value !== null) {
-        let normValue = value * 1000 / maxVal;
-        stops.push([value, normValue]);
+        if(values.indexOf(value) < 0) {
+          let normValue = value * 10000 / maxVal;
+          stops.push([value, normValue]);
+          values.push(value);
+        }
+        
       }
     });
+
+    console.log(Math.max(...values));
 
     let height = {
       property: heightProperty,
