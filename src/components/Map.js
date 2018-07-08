@@ -4,6 +4,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import './Map.css'
 import data from './../data/stovner.json'
 import Legend from './Legend'
+import PitchToggle from './PitchToggle/pitchtogglecontrol.js'
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
 
 
@@ -48,6 +49,8 @@ class Map extends Component {
       //this.setFill();
       this.getHeight();
     });
+
+    this.map.addControl(new PitchToggle({minpitchzoom: 11})); 
 
     this.map.on('rotate', () =>{
       if(this.map.getPitch() > 25 ) {
