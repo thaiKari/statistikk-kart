@@ -39,8 +39,9 @@ class Map extends Component {
         paint: {
           'fill-extrusion-color':{
             property: this.props.active.property,
-            stops: this.props.active.stops
+            stops: this.props.active.stops,
           },
+          'fill-extrusion-opacity': 0.8
         }
       },); // ID metches `mapbox/streets-v9`
 

@@ -25,7 +25,7 @@ class Legend extends Component {
     }
 
 
-    text =  prevStop + ' +';
+    text =  prevStop + ' + ';
     legendStops.push([text, prevColor]);
     console.log("legendStops", legendStops);
 
