@@ -40,7 +40,7 @@ const options = [{
 
 class Map extends Component {
   
-  constructor(props: Props) {
+  constructor(props) {
     super(props);
     this.state = {
       active: options[0]
@@ -54,7 +54,7 @@ class Map extends Component {
       //center: [5, 34],
       //zoom: 1.5
       center: [10.924519, 59.962828],
-      zoom: 12
+      zoom: 11
     });
 
     this.map.on('load', () => {
@@ -65,12 +65,59 @@ class Map extends Component {
 
       this.map.addLayer({
         id: 'countries',
-        type: 'fill',
-        source: 'countries'
-      }, 'country-label-lg'); // ID metches `mapbox/streets-v9`
+        type: 'fill-extrusion',
+        source: 'countries',
+        paint: {
+          'fill-extrusion-color':{
+            property: this.state.active.property,
+            stops: this.state.active.stops
+          },
+        }
+      },); // ID metches `mapbox/streets-v9`
 
-      this.setFill();
+      //this.setFill();
+      this.getHeight();
     });
+
+    this.map.on('rotate', () =>{
+      if(this.map.getPitch() > 25 ) {
+        this.map.setPaintProperty('countries', 'fill-extrusion-height', this.getHeight()
+        /*{
+          type: 'identity',
+          property: this.state.active.property
+        }*/);
+      } else {
+        this.map.setPaintProperty('countries', 'fill-extrusion-height',0 );
+      }
+    });
+  }
+
+  getHeight() {
+    let heightProperty = this.state.active.property;
+    let maxVal = data.maxVals[heightProperty];
+    console.log(maxVal);
+    let allFeatures = data.features;
+    const stops = [];
+
+    Object.keys(allFeatures).forEach(id => {
+      const value = allFeatures[id].properties.pop_tot;
+
+      if (value !== null) {
+        let normValue = value * 1000 / maxVal;
+        stops.push([value, normValue]);
+      }
+    });
+
+    let height = {
+      property: heightProperty,
+      default: 0,
+      type: "categorical",
+      stops: stops
+    };
+
+    console.log(height);
+
+    return height;
   }
 
   setFill() {
