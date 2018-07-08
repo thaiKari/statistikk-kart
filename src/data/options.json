@@ -1,0 +1,17 @@
+{
+    "pop_tot":{
+      "name": "Population_stovner",
+      "description": "Total population",
+      "property": "pop_tot",
+      "maxVal": 10000,
+      "intervals": [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000]
+    
+    },
+    "pop_mal":{
+      "name": "Population",
+      "description": "Male population",
+      "property": "pop_mal",
+      "maxVal": 5000,
+      "intervals": [0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000]
+    }
+}
