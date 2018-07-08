@@ -3,47 +3,16 @@ import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './Map.css'
 import data from './../data/stovner.json'
+import Legend from './Legend'
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
 
 
-const options = [{
-  name: 'Population_stovner',
-  description: 'Estimated total population',
-  property: 'pop_tot',
-  stops: [
-    [0, '#f8d5cc'],
-    [1000, '#f4bfb6'],
-    [2000, '#f1a8a5'],
-    [3000, '#ee8f9a'],
-    [4000, '#ec739b'],
-    [5000, '#dd5ca8'],
-    [6000, '#c44cc0'],
-    [7000, '#9f43d7'],
-    [10000, '#6e40e6']
-  ]
-},{
-  name: 'Population',
-  description: 'Estimated total population',
-  property: 'pop_mal',
-  stops: [
-    [0, '#f8d5cc'],
-    [500, '#f4bfb6'],
-    [1000, '#f1a8a5'],
-    [1500, '#ee8f9a'],
-    [2000, '#ec739b'],
-    [2500, '#dd5ca8'],
-    [3000, '#c44cc0'],
-    [3500, '#9f43d7'],
-    [4000, '#6e40e6']
-  ]
-}]
-
 class Map extends Component {
-  
+
   constructor(props) {
     super(props);
     this.state = {
-      active: options[0]
+      //active: options[0]
     };
   }
 
@@ -69,8 +38,8 @@ class Map extends Component {
         source: 'countries',
         paint: {
           'fill-extrusion-color':{
-            property: this.state.active.property,
-            stops: this.state.active.stops
+            property: this.props.active.property,
+            stops: this.props.active.stops
           },
         }
       },); // ID metches `mapbox/streets-v9`
@@ -93,14 +62,15 @@ class Map extends Component {
   }
 
   getHeight() {
-    let heightProperty = this.state.active.property;
+    let heightProperty = this.props.active.property;
     let maxVal = data.maxVals[heightProperty];
     console.log(maxVal);
     let allFeatures = data.features;
     const stops = [];
 
     Object.keys(allFeatures).forEach(id => {
-      const value = allFeatures[id].properties.pop_tot;
+      
+      const value = allFeatures[id].properties[this.props.active.property];
 
       if (value !== null) {
         let normValue = value * 1000 / maxVal;
@@ -121,7 +91,7 @@ class Map extends Component {
   }
 
   setFill() {
-    const { property, stops } = this.state.active;
+    const { property, stops } = this.props.active;
     this.map.setPaintProperty('countries', 'fill-color', {
       property,
       stops
@@ -131,6 +101,7 @@ class Map extends Component {
   render() {
     return (
       <div className="Map">
+        <Legend active={this.props.active}/>
         <div ref={el => this.mapContainer = el} className="map" id='map'/>
       </div>
     );
