@@ -1,10 +1,6 @@
 {
     "type": "FeatureCollection",
     "name": "Rute_befolkning",
-    "maxVals": {
-      "pop_tot": 10000,
-      "pop_mal": 4000
-    },
     "crs": {
       "type": "name",
       "properties": {
