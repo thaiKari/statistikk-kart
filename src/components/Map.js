@@ -25,7 +25,6 @@ class Map extends Component {
     for (var i = 0; i < colors.length ; i++ ){
       stops.push([this.props.active.intervals[i], colors[i]]);
     }
-    console.log(stops);
     return stops;
   }
 
@@ -74,12 +73,9 @@ class Map extends Component {
   getHeight() {
     let heightProperty = this.props.active.property;
     let maxVal = this.props.active.maxVal;
-    console.log(maxVal/500);
     let allFeatures = data.features;
     const stops = [];
     let values = [];
-
-    console.log('numSquares', allFeatures.length);
 
     Object.keys(allFeatures).forEach(id => {
       
@@ -94,8 +90,6 @@ class Map extends Component {
         
       }
     });
-
-    console.log(Math.max(...values));
 
     let height = {
       property: heightProperty,
